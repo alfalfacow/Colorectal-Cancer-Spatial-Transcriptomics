@@ -193,4 +193,4 @@ VlnPlot(
         axis.ticks.x = element_blank())
 
 ```
-# Once this has been done, you are ready to proceed to the next step!! Do NOT normalize the data (EdgeR requires raw counts without normalization, and we will apply normalization methods using EdgeR directly).
+## Once this has been done, you are ready to proceed to the next step!! Do NOT normalize the data (EdgeR requires raw counts without normalization, and we will apply normalization methods using EdgeR directly).
