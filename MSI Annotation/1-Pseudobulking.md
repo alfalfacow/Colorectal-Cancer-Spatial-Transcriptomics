@@ -83,7 +83,7 @@ gunzip file_name.format.gz #this gunzips a single file
 gunzip file1.format.gz file2.format.gz file3.format.gz #this gunzips multiple files
 gunzip *.gz #this gunzips all files in the current directory (from the cd command) that end in .gz
 ```
-If you are curious, for other must-know linux commands for use on command terminal, see [section 0](https://github.com/alfalfacow/Lab-Notebook/blob/main/Supercomputer/0-Must-Know-Linux-Commands) of the Supercomputer "chapter" of this lab notebook!
+If you are curious, for other must-know linux commands for use on command terminal, see [this github repo](https://gist.github.com/bradtraversy/cc180de0edee05075a6139e42d5f28ce)!
 
 ### 1.2: .mtx file
 Another format for the gene expression matrix is the .mtx format (usually named (sample name)_matrix.mtx; [see this example](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM9322957). This requires a slightly different workflow for loading in the data into Seurat: since the Load10X_Spatial command recognizes .h5 files, we have to convert the .mtx file into an .h5 file.
