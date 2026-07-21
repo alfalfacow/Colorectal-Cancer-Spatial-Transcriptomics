@@ -275,3 +275,9 @@ write.table(edgeR_cpm,
 Congratulations! You have successfully generated the input file for the MAP tool. The .txt file will be in the same folder that the R studio project you are currently on is located :)
 
 To see how to run this input into MAP, see section 2.
+
+## References
+* [Precedent Paper: Profiling the heterogeneity of colorectal cancer consensus molecular subtypes using spatial transcriptomics](https://pmc.ncbi.nlm.nih.gov/articles/PMC10781769/)
+* [Microsatellite instability Absolute single sample Predictor (MAP) tool](https://sourceforge.net/p/mapmsi/wiki/MAP/)
+* [Biostars forum](https://www.biostars.org/p/424438/) explaining standard bulk RNA-seq normalization workflow in EdgeR
+* [Gene expression units blog](https://www.reneshbedre.com/blog/expression_units.html)
