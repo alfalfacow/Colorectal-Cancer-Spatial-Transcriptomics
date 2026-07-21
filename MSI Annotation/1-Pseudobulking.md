@@ -34,10 +34,13 @@ For this project, we want to apply the Microsatellite instability Absolute singl
 Note: Steps 1 and 2 are directly copied from my original [spatial transcritpomics notes](https://github.com/alfalfacow/Lab-Notebook/blob/main/Spatial%20Transcriptomics/1-Introductory-Workflow.md)!!
 
 ## Step 1: Loading Data/Data Entry
-First, you will have to install and initialize the Seurat package on an R studio window.
+First, you will have to install and initialize the Seurat package on an R studio window, as well as the other necessary packages for the workflow.
 ```
-install.packages("Seurat")
+install.packages("Seurat") #if Seurat not already installed
 library(Seurat)
+library(tidyverse)
+BiocManager::install("edgeR") #if edgeR not already installed)
+library(edgeR)
 ```
 
 Next, you will need to obtain a spatial transcriptomics dataset, either from a publically accessible dataset or one you generated yourself. An example is the [GSE281978](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE281978) series from the Gene Expression Omnibus (GEO) for Head and Neck Cancer (HNSC). The dataset can be downloaded as a tar file at the bottom of the page.
@@ -155,7 +158,7 @@ The first two have been stored as part of the meta.data of the Seurat object and
 SeuratObject[["percent.mt"]] <- PercentageFeatureSet(object = SeuratObject, pattern = "^MT-")
 SeuratObject[["percent.ribo"]] <- PercentageFeatureSet(SeuratObject, pattern = "^RP[SL]")
 
-#Visualize the current distribution of each of these metrics with a violin plot
+#Visualize the current distribution of each of these metrics with a violin plot (optional)
 VlnPlot(
   SeuratObject, features = c("nFeature_Spatial", "nCount_Spatial", "percent.mt", "percent.ribo"), 
   pt.size = 0.1, ncol = 3) & 
@@ -163,7 +166,7 @@ VlnPlot(
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank())
 
-#Visualize each metric on the tissue image using the SpatialFeaturePlot() function
+#Visualize each metric on the tissue image using the SpatialFeaturePlot() function (optional)
 SpatialFeaturePlot(
   SeuratObject, features = c("nFeature_Spatial", "nCount_Spatial", "percent.mt", "percent-ribo")) &
   theme(legend.position = "bottom")
@@ -178,15 +181,15 @@ Common thresholds for quality control have been taken from this [paper](https://
 4. percent.ribo > 40%
 
 ```
-#Creates a NEW Seurat object as a subset of the original using the subset() function, keeping the features that are NOT part of the exclusion criteria defined above
+#Updates Seurat object as a subset of the original using the subset() function, keeping the features that are NOT part of the exclusion criteria defined above
 
-SeuratObject_Subset <- subset(
+SeuratObject <- subset(
   SeuratObject, subset = nFeature_Spatial < 7500 & nFeature_Spatial > 200 &
   nCount_Spatial < 50000 & nCount_Spatial > 250 & percent.mt < 15 & percent.ribo < 40)
 
-#You may plot new violin plots to verify filtering
+#You may plot new violin plots to verify filtering (optional)
 VlnPlot(
-  SeuratObject_subset, features = c("nFeature_Spatial", "nCount_Spatial", "percent.mt", "percent.ribo"), 
+  SeuratObject, features = c("nFeature_Spatial", "nCount_Spatial", "percent.mt", "percent.ribo"), 
   pt.size = 0.1, ncol = 3) & 
   theme(axis.title.x = element_blank(),
         axis.text.x = element_blank(),
@@ -194,3 +197,81 @@ VlnPlot(
 
 ```
 ## Once this has been done, you are ready to proceed to the next step!! Do NOT normalize the data (EdgeR requires raw counts without normalization, and we will apply normalization methods using EdgeR directly).
+
+## Step 3: Aggregating data for Pseudobulk
+We will be using Seurat's AggregateExpression() function to sum gene expression counts from our sample!
+```
+SeuratObject_sum <- AggregateExpression(
+  SeuratObject,
+  group.by = "orig.ident",
+  normalization.method = NULL,
+  verbose = TRUE
+)
+```
+We will group by orig.ident, which is the metadata section that should defines the tissue sample (thus it is the same for all spots from the same sample). If we wanted to group by cell type, we would use a different metadata section in group.by, but we do not need to worry about that right now. Also, we are NOT normalizing the data, so we set normalization.method as NULL!
+
+Then, we want to update the output as a matrix so it can be read by edgeR in the next step (it is currently a "list" object:
+```
+SeuratObject_sum <- as.matrix(SeuratObject_sum$Spatial) #The output matrix data we want is within "Spatial" of the "SeuratObject_sum", so we invoke that using the $ operator.
+```
+At this point, your SeuratObject_sum should be a matrix with rows as gene names and columns as samples (should only be one sample). You should double check the number of genes in this matrix and make sure it matches the original number in your filtered Seurat object!
+```
+dim(SeuratObject) #this returns the dimensions of the original expression matrix: number of genes and then number of cells
+dim(SeuratObject_sum) #this returns the dimensions of the summed matrix: number of genes (should be same as above) and 1 (one sample)
+```
+
+## Step 4: Log-normalization via EdgeR
+The MAP software asks for the input to be in "log2 transformed expression". However, our aggregated only has raw summed counts. To transform our raw counts, we will use the EdgeR workflow (which is typically used to transform/normalize raw Bulk RNA sequencing data).
+
+### 4.1: Create DGEList object
+We will use the matrix we created in step 3 as an input to create a DGEList object (standard input for EdgeR pipeines):
+```
+edgeR <- DGEList(counts = SeuratObject_sum)
+```
+
+### 4.2: Filter low counts (filterByExpr function)
+Next, we will filter out genes with lower than a certain threshold of counts. Typically the default is 10 counts minimum, but the [precedent paper](https://pmc.ncbi.nlm.nih.gov/articles/PMC10781769/) sets this to 50. Also, typically these genes are removed directly. However for our purposes, instead of filtering the genes out of the data entirely, we want to just set any gene with counts under 50 to 0, because MAP expects expression values of all genes.
+```
+keep <- filterByExpr(edgeR, min.count = 50) #this function returns a list of all genes ABOVE the threshold set by "min.count"
+edgeR$counts[!keep, ] <- 0 #this will set all rows (gene names) that are NOT part of the "keep" list (thus any under 50) to 0
+```
+
+### 4.3: Generate log2(CPM) matrix
+The penultimate step of our workflow is to go from raw counts to a log-normalized matrix (As mentioned before, MAP expects an input of log2 normalized expression data in a matrix)! Typically this step would be preceeded by something called "Trimmed Mean of M-values" (TMM) normalization (calcNormFactors). However, this is only done when there are multiple samples of interest being compared for differential expression analysis, which we are not interested in. We are only interested in single samples, which means we can skip this step.
+
+We will use edgeR's cpm() function to normalize by Counts Per Million (CPM) (read more about gener expression units [here](https://www.reneshbedre.com/blog/expression_units.html#google_vignette)). CPM is calculated by the following formula, which edgeR will automatically apply for us: gene expression counts * 1,000,000 / total counts for the entire sample. 
+
+```
+edgeR_cpm <- cpm(edgeR, log = TRUE) #setting log = TRUE gives us log2(CPM+2). The +2 is a default offset in edgeR to prevent log(0), which will throw an error
+```
+This should output a matrix object with the log2(CPM+2) normalized data!!!
+
+## Step 5: Prepare results as an input .txt file for MAP
+After doing all the hard work to calculate and output our pseudobulked, log2transformed and CPM normalized expression matrix, we are now ready to export it as a .txt file for input into the MAP tool!
+
+First we will verify that the 31 marker genes that MAP relies on are included in the genes list
+```
+#reference genes list
+MAP_genes <- c("LY6G6D", "CYP2W1", "TNNC2", "CTTNBP2", "NKD1", "CAB39L", "MLH1", "EPM2AIP1",
+  "SHROOM4", "RNF43", "PRR15", "ATP9A", "H2AFJ", "FARP1", "TCF7", "MAPRE3",
+  "ZMYND8", "DDX27", "TGFBR2", "PIWIL4", "FECH", "DOCK5", "TYMS", "HPSE",
+  "ASPHD2", "AGR2", "GFI1", "RPL22L1", "RAB27B", "GNLY", "DUSP4")
+
+#verify 31 genes of interest are in the matrix
+MAP_genes %in% rownames(edgeR_cpm)
+```
+Ideally you should see 31 "TRUE" statements printed in the output section of R studio.
+
+Finally, we are ready to export the .txt file!
+```
+write.table(edgeR_cpm, 
+            "MAP_input.txt",
+            sep = "\t", 
+            quote = FALSE, 
+            row.names = TRUE, 
+            col.names = NA)
+```
+
+Congratulations! You have successfully generated the input file for the MAP tool. The .txt file will be in the same folder that the R studio project you are currently on is located :)
+
+To see how to run this input into MAP, see section 2.
