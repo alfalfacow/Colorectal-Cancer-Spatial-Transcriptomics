@@ -77,7 +77,7 @@ testP = "/PATH/TO/YOUR/DESIRED/OUTPUT/DIRECTORY"
 expData = "/PATH/TO/YOUR/MAP_input.txt"
 runMAP(expData, testP)
 ```
-testP is the folder/directory where you want to store your MAP results. For example: /expanse/lustre/projects/csd670/user or /home/user/folder_of_your_choice. If you name a path and the ending folder doesn't exist yet, it will be created as an output.
+testP is the folder/directory where you want to store your MAP results. In our case, we would store it in the project directory created in step 1.3.
 
 expData is the path to the input MAP_input.txt file you created in the previous instructions!
 
@@ -141,7 +141,7 @@ At this point, you should double check that all the files are in the correct pla
 
 >Parent path/directory (example: /expanse/lustre.... etc etc )
 ->MAP (project directory name)
--->output (folder)
+-->output (folder) #if this folder doesn't exist yet, the MAP script should create it so don't worry if it isn't there yet
 -->MAP_input.txt (input file)
 -->run_map.R (R script)
 -->MAP_script.txt (batch script)
@@ -150,7 +150,7 @@ Once you have verified this, you are ready to submit the batch job!
 
 First, we run a command to configure the google document format into the necessary format:
 ```
-cd /path/to/your/project/directory #change current directory to your project directory (whichever one you made)
+cd /path/to/your/project/directory #change current directory to your project directory (whichever one you made) to access the sbatch file
 dos2unix MAP_script.txt
 ```
 Then we can send off the script as a batch job using sbatch!
