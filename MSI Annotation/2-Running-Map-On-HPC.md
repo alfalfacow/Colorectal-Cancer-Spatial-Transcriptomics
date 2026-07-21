@@ -139,7 +139,7 @@ After you are done editing these fields, save the google doc as a .txt file and 
 ## 4: Running batch script
 At this point, you should double check that all the files are in the correct place. Here is what the hierarchy should be like:
 
->Parent path/directory (example: /expanse/lustre.... etc etc )
+Parent path/directory (example: /expanse/lustre.... etc etc )
 ->MAP (project directory name)
 -->output (folder) #if this folder doesn't exist yet, the MAP script should create it so don't worry if it isn't there yet
 -->MAP_input.txt (input file)
