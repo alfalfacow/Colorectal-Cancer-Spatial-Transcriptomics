@@ -5,7 +5,7 @@ To work around this problem, we will use our High-Performance Computing (HPC) sy
 
 In the HPC computing world, there is something called a container. Essentially, this is a sharable file/"package" of software containing all necessary libraries, environments, and dependencies of a project. The most commonly used container system is known as Docker, but I will be using Singularity container system because it was created specifically for HPC systems. To learn more about Singularity and containers, here is a [source](https://docs.sylabs.io/guides/3.5/user-guide/introduction.html) you can explore. I also found some additional [youtube](https://www.youtube.com/watch?v=_KhbwXqk0Bk) [videos](https://www.youtube.com/watch?v=xty42A05Wg0) that may be helpful (this is 100% optional and not needed for the instructions of this project).
 
-A Singularity container is stored in the form of a .sif file. In the container I have created, I was able to install MAP, the old version of R, and thus the old version of the GSVA dependency. Side note: one major advantage of containers is that you may store versions of software that is completely different from the rest of your computer's environment.
+A Singularity container is stored in the form of a .sif file. In the container I have created, I was able to install MAP, the old version of R, and thus the old version of the GSVA dependency. Side note: one major advantage of containers is that you may store versions of software that is completely different from the rest of your computer's environment; this is the advantage we are using with the container today!
 
 The following instructions will teach you how to access and use this container to run MAP!
 
