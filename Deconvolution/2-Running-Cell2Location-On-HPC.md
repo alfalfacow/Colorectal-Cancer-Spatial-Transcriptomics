@@ -5,7 +5,7 @@ Cell2Location bridges this obstacle by estimating how many of each cell type is 
 
 For the purposes of this project, I have already trained Cell2Location on the reference datasets ([GSE144735](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE144735) and [GSE132465](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE132465)), both of which have cell types prelabeled. These were chosen due to their use in previous CRC studies using cell2location, and also because it includes cells labeled by consensus molecular subtype (CMS), another CRC-specific feature we may be interested in.
 
-You may have already run Cell2Location for the pancreatic cancer project, so this is mostly instructions for adapting that script for use on the supercomputer. That way, you won't have to leave it running with your computer on all day.
+You may have already run Cell2Location for the pancreatic cancer project, so this is mostly instructions for adapting that script for use on the supercomputer. That way, you won't have to leave it running with your computer on all day. Running this on the supercomputer is optional! If you prefer, feel free to continue to run it locally (it may actually be slightly faster since it can utilize GPU, and you may already know how to do it).
 
 ## Table of Contents
 
