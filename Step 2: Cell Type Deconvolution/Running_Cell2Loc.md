@@ -45,7 +45,7 @@ This will create the .h5ad file in your current working directory! This will be 
 
 ## Step 2: Running Cell2Location
 ### 2.1: Prepared script on your end
-From the pancreatic project, you may already have a working script! The following instructions will teach you how to run this preexisting script as a batch job through the supercomputer.
+From the pancreatic project, you may already have a working script! The following instructions will teach you how to run this preexisting script as a batch job through the supercomputer. HOWEVER, YOU MAY STILL RUN CELL2LOCATION HOWEVER YOU ARE COMFORTABLE!!!
 
 Make a copy of the following template to create the batch job file: [click this link](https://docs.google.com/document/d/1ZcUjWUp-G6wvQJUmQyNxw2hedvN62fNrn5MarBcxf_8/edit?usp=sharing). The contents are posted below:
 ```
