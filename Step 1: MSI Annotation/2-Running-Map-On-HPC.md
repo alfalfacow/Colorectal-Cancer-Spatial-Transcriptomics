@@ -68,7 +68,7 @@ mkdir/expanse/lustre/projects/csd670/user/MAP
 Aside from the .sif container file, the remaining 3 files will be prepared by you and should be deposited in the new project directory of your choosing!
 
 ## Step 2: Setting up R script
-Setting up the R script is very simple (only 4 lines!) You may do this within R studio (create new script and then export it as a .R file), or edit a google doc and export it as a .txt file (and then renaming the extension to .R). Personally I haven't tried the google doc way (not 100% sure if it's reliable) so I prefer doing this step within R studio. 
+Setting up the R script is very simple (only 4 lines!) You may do this within R studio (create new script and then export it as a .R file), or edit a google doc and export it as a .txt file (and then renaming the extension to .R). Personally I haven't tried the google doc way (not 100% sure if it's reliable) so I prefer doing this step within R studio. You can also use the example script that I have uploaded to this github (access it [here](https://github.com/alfalfacow/Colorectal-Cancer-Spatial-Transcriptomics/blob/main/Step%201%3A%20MSI%20Annotation/Files/run_map.R)) and edit it as per the instructions below.
 
 On the top right of R studio there should be green plus on top of a blank paper icon. Click "R script" (or just use the shift+command+N shortcut) to open a new script tab. Then, input the following code:
 ```
