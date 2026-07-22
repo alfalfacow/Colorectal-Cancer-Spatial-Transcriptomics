@@ -7,6 +7,8 @@ For the purposes of this project, I have already trained Cell2Location on the re
 
 You may have already run Cell2Location for the pancreatic cancer project, so this is mostly instructions for adapting that script for use on the supercomputer. That way, you won't have to leave it running with your computer on all day. Running this on the supercomputer is optional! If you prefer, feel free to continue to run it locally (it may actually be slightly faster since it can utilize GPU, and you may already know how to do it).
 
+These instructions assume familiarity with Expanse/HPC computing, which you have hopefully gained from trying out the [MSI annotation instructions](https://github.com/alfalfacow/Colorectal-Cancer-Spatial-Transcriptomics/tree/main/Step%201%3A%20MSI%20Annotation).
+
 ## Table of Contents
 
 1: Preparing the files
@@ -223,6 +225,6 @@ print("Done", flush=True)
 ```
 The final output of interest should be two .csv files with mean cell abundance estimates and 5% quantile cell abundance estimates (absolute/minimum cell abundance estimates, according to the cell2location website). You may also see a line that stores the .h5ad file in the output
 
-For more details on the code used, it is all adapted from the cell2location vignette [here](https://cell2location.readthedocs.io/en/latest/notebooks/cell2location_tutorial.html).
+If you are curious about the function of each line of code, it is adapted from the cell2location vignette [here](https://cell2location.readthedocs.io/en/latest/notebooks/cell2location_tutorial.html).
 
 I hope this was helpful! Please let me know at any time if any of the code doesn't work or if there is anything to be troubleshooted :)
