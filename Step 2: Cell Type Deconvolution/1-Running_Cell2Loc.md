@@ -94,6 +94,8 @@ Then, you will need to prepare all your files in the supercomputer workspace. Yo
 * Cell2Location python script (.py file)
 * SBATCH input (.txt file)
 
+If you hadn't downloaded the inf_aver.csv file from my instructions yet, it is deposited within this github at [this link](https://github.com/alfalfacow/Colorectal-Cancer-Spatial-Transcriptomics/blob/main/Step%202%3A%20Cell%20Type%20Deconvolution/Files/inf_aver.csv)
+
 Place these all in the same project directory. You may follow the same guidelines for creating/choosing a project directory from the MSI Annotations instructions.
 
 Finally, to submit the batch job via command line/terminal:
@@ -104,7 +106,7 @@ sbatch whatever_name_sbatch_script.txt
 ```
 
 ### 2.2: No prepared script
-The following code chunk should be slightly edited (details below) and pasted into a .py file. It contains only the code for cell type abundance inference, as I already did the model training on the reference scRNA-seq dataset.
+The following code chunk should be slightly edited (details below) and pasted into a .py file. It contains only the code for cell type abundance inference, as I already did the model training on the reference scRNA-seq dataset. You can also find a copy of this code deposited in this github at [this link](https://github.com/alfalfacow/Colorectal-Cancer-Spatial-Transcriptomics/blob/main/Step%202%3A%20Cell%20Type%20Deconvolution/Files/example_cell2loc_run.py).
 ```
 import scanpy as sc
 import numpy as np
