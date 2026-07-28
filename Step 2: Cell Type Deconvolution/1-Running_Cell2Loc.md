@@ -225,7 +225,7 @@ abundance_df_5.to_csv("/expanse/lustre/scratch/akao1/temp_project/STCRC/GSM87035
 print(f"Abundance table shape: {abundance_df.shape}", flush=True)
 print("Done", flush=True)
 ```
-The final output of interest should be two .csv files with mean cell abundance estimates and 5% quantile cell abundance estimates (absolute/minimum cell abundance estimates, according to the cell2location website). You may also see a line that stores the .h5ad file in the output
+The final output of interest should be two .csv files with mean cell abundance estimates and 5% quantile cell abundance estimates (absolute/minimum cell abundance estimates, according to the cell2location website). You may also see a line that stores the .h5ad file in the output, but you don't have to put this in the folder (since it might take up too much drive space over time!)
 
 If you are curious about the function of each line of code, it is adapted from the cell2location vignette [here](https://cell2location.readthedocs.io/en/latest/notebooks/cell2location_tutorial.html).
 
